@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add YouTube Video</title>
+    <style>
+        #video-container {
+            margin-top: 20px;
+            outline:none;
+            border:none;
+        }
+        iframe {
+            width: 360px;
+            height: 202px; /* Maintain 16:9 aspect ratio */
+            border: 0;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <form id="videoForm">
+        <label for="videoUrl">YouTube Video URL:</label>
+        <input type="text" id="videoUrl" required>
+        <label for="videoCount">Number of Videos:</label>
+        <input type="number" id="videoCount" min="1" value="1">
+        <button type="button" onclick="addVideo()">Add Video</button>
+        <button type="button" onclick="addMultipleVideos()">Add Multiple Videos</button>
+    </form>
+
+    <div id="video-container">
+        <!-- Videos will be added here -->
+    </div>
+
+    <script>
+        function addVideo() {
+            addVideos(1);
+        }
+
+        function addMultipleVideos() {
+            const videoCountInput = document.getElementById('videoCount');
+            const videoCount = parseInt(videoCountInput.value);
+            if (isNaN(videoCount) || videoCount <= 0) {
+                alert('Please enter a valid number of videos.');
+                return;
+            }
+            addVideos(videoCount);
+        }
+
+        function addVideos(count) {
+            const videoUrlInput = document.getElementById('videoUrl');
+            const videoUrl = videoUrlInput.value.trim();
+
+            if (!videoUrl) {
+                alert('Please enter a valid YouTube video URL.');
+                return;
+            }
+
+            // Extract video ID from URL
+            const videoId = extractVideoId(videoUrl);
+
+            if (!videoId) {
+                alert('Invalid YouTube video URL. Please enter a valid URL.');
+                return;
+            }
+
+            // Add multiple iframes
+            const videoContainer = document.getElementById('video-container');
+            for (let i = 0; i < count; i++) {
+                const iframe = document.createElement('iframe');
+                iframe.width = '360';
+                iframe.height = '202'; // Maintain 16:9 aspect ratio
+                iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                iframe.allowFullscreen = true;
+                videoContainer.appendChild(iframe);
+            }
+
+            // Clear input field
+            videoUrlInput.value = '';
+        }
+
+        function extractVideoId(url) {
+            const regExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/;
+            const match = url.match(regExp);
+            return match && match[1];
+        }
+    </script>
+</body>
+</html>
