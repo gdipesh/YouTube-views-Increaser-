@@ -60,7 +60,7 @@
                 const iframe = document.createElement('iframe');
                 iframe.width = '360';
                 iframe.height = '202'; // Maintain 16:9 aspect ratio
-                iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}`;
+                iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}&mute=1`;
                 iframe.allowFullscreen = true;
                 iframe.setAttribute('allow', 'autoplay'); // Allow autoplay
 
