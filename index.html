@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Increase your youtube views </title>
+    <title>views increaser for youtube</title>
     <style>
         #video-container {
             margin-top: 20px;
-            outline:none;
-            border:none;
         }
         iframe {
             width: 360px;
@@ -24,8 +22,7 @@
         <input type="text" id="videoUrl" required>
         <label for="videoCount">Number of Videos:</label>
         <input type="number" id="videoCount" min="1" value="1">
-        <button type="button" onclick="addVideo()">Add Video</button>
-        <button type="button" onclick="addMultipleVideos()">Add Multiple Videos</button>
+        <button type="button" onclick="addVideos()">Add Videos</button>
     </form>
 
     <div id="video-container">
@@ -33,26 +30,19 @@
     </div>
 
     <script>
-        function addVideo() {
-            addVideos(1);
-        }
-
-        function addMultipleVideos() {
-            const videoCountInput = document.getElementById('videoCount');
-            const videoCount = parseInt(videoCountInput.value);
-            if (isNaN(videoCount) || videoCount <= 0) {
-                alert('Please enter a valid number of videos.');
-                return;
-            }
-            addVideos(videoCount);
-        }
-
-        function addVideos(count) {
+        function addVideos() {
             const videoUrlInput = document.getElementById('videoUrl');
+            const videoCountInput = document.getElementById('videoCount');
             const videoUrl = videoUrlInput.value.trim();
+            const videoCount = parseInt(videoCountInput.value, 10);
 
             if (!videoUrl) {
                 alert('Please enter a valid YouTube video URL.');
+                return;
+            }
+
+            if (isNaN(videoCount) || videoCount < 1) {
+                alert('Please enter a valid number of videos to add.');
                 return;
             }
 
@@ -64,19 +54,24 @@
                 return;
             }
 
-            // Add multiple iframes
-            const videoContainer = document.getElementById('video-container');
-            for (let i = 0; i < count; i++) {
+            // Add specified number of iframes
+            for (let i = 0; i < videoCount; i++) {
+                // Create iframe element for the video
                 const iframe = document.createElement('iframe');
                 iframe.width = '360';
                 iframe.height = '202'; // Maintain 16:9 aspect ratio
-                iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}`;
                 iframe.allowFullscreen = true;
+                iframe.setAttribute('allow', 'autoplay'); // Allow autoplay
+
+                // Append iframe to the video container
+                const videoContainer = document.getElementById('video-container');
                 videoContainer.appendChild(iframe);
             }
 
-            // Clear input field
+            // Clear input fields
             videoUrlInput.value = '';
+            videoCountInput.value = '1';
         }
 
         function extractVideoId(url) {
